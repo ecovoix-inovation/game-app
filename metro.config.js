@@ -6,4 +6,18 @@ const { withNativeWind } = require('nativewind/metro');
 // eslint-disable-next-line no-undef
 const config = getDefaultConfig(__dirname);
 
-module.exports = withNativeWind(config, { input: './global.css' });
+const{ transformer, resolver } = config;
+
+config.transformer = {
+  ...transformer,
+  babelTransformerPath: require.resolve("react-native-svg-transformer"), // Adiciona o transformador de SVGs
+  //assetPlugins: ['expo-asset/tools/hashAssetFiles'], // Plugin para hashing de assets
+};
+
+config.resolver = {
+  ...resolver,
+  assetExts: config.resolver.assetExts.filter((ext) => ext !== "svg"), // Remove "svg" do padrão
+  sourceExts: [...config.resolver.sourceExts, "svg"], // Adiciona "svg" como extensão reconhecida
+};
+
+module.exports = withNativeWind(config, { input: './src/styles/global.css' });
