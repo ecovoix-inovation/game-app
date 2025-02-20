@@ -9,7 +9,7 @@ export function ProgressBar({
   label: string;
 }) {
   return (
-    <View className="mt-4">
+    <View>
       <View className="w-full h-10 bg-gray-300 rounded-full overflow-hidden">
         <View
           style={{ width: `${progress}%` }}

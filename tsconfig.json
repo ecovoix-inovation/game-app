@@ -17,6 +17,7 @@
     "**/*.tsx",
     "expo-env.d.ts",
     ".expo/types/**/*.ts",
-    "types/*.ts"
+    "types/*.ts",
+    "nativewind-env.d.ts"
   ]
 }

@@ -16,9 +16,10 @@ export function AchievementList({
   return (
     <FlatList
       data={data}
+      className="h-full"
       keyExtractor={(item, index) => index.toString()}
       renderItem={({ item }) => (
-        <View className="bg-white rounded-xl p-4 mt-4">
+        <View className="my-2">
           <View className="flex-row gap-2 ">
             <View className="size-2 bg-gray-300 rounded-3xl justify-center items-center overflow-hidden">
               <Image

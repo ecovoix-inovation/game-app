@@ -1,22 +1,87 @@
-import { forwardRef } from 'react';
-import { Text, TouchableOpacity, TouchableOpacityProps, View } from 'react-native';
+import React from "react";
+import { cva, type VariantProps } from "class-variance-authority";
+import {
+  TouchableOpacity,
+  Text,
+  TouchableOpacityProps,
+  ActivityIndicator,
+} from "react-native";
+import { cn } from "@/lib/utils";
 
-type ButtonProps = {
-  title: string;
-} & TouchableOpacityProps;
-
-export const Button = forwardRef<View, ButtonProps>(({ title, ...touchableProps }, ref) => {
-  return (
-    <TouchableOpacity
-      ref={ref}
-      {...touchableProps}
-      className={`${styles.button} ${touchableProps.className}`}>
-      <Text className={styles.buttonText}>{title}</Text>
-    </TouchableOpacity>
-  );
+// Variantes para o botão
+const button = cva("rounded-full w-full p-4", {
+  variants: {
+    variant: {
+      primary: ["bg-primary", "border-transparent"],
+      secondary: ["bg-transparent", "border border-2 border-primary"],
+      danger: ["bg-red-500", "border-transparent"],
+      ghost: ["bg-transparent", "border-transparent"],
+    },
+    size: {
+      sm: [],
+      base: [],
+      lg: [],
+    },
+  },
+  defaultVariants: {
+    variant: "primary",
+  },
 });
 
-const styles = {
-  button: 'items-center bg-indigo-500 rounded-[28px] shadow-md p-4',
-  buttonText: 'text-white text-lg font-semibold text-center',
+// Variantes para o texto dentro do botão
+const text = cva("text-center font-bold", {
+  variants: {
+    size: {
+      sm: ["text-sm"],
+      base: ["text-lg"],
+      lg: ["text-xl"],
+    },
+    variant: {
+      primary: ["text-white"],
+      secondary: ["text-primary"],
+      danger: ["text-white"],
+      ghost: ["text-black", "dark:text-white"],
+    },
+  },
+  defaultVariants: {
+    size: "base",
+    variant: "primary",
+  },
+});
+
+export interface ButtonProps
+  extends TouchableOpacityProps,
+    VariantProps<typeof button> {
+  className?: string;
+  textClassName?: string;
+  isLoading?: boolean;
+}
+
+const Button: React.FC<ButtonProps> = ({
+  className,
+  textClassName,
+  variant,
+  size,
+  disabled,
+  children,
+  isLoading,
+  ...props
+}) => {
+  return (
+    <TouchableOpacity
+      className={cn(button({ variant, size }), className)}
+      disabled={disabled}
+      {...props}
+    >
+      {isLoading ? (
+        <ActivityIndicator color="white" />
+      ) : (
+        <Text className={cn(text({ variant, size }), textClassName)}>
+          {children}
+        </Text>
+      )}
+    </TouchableOpacity>
+  );
 };
+
+export default Button;
